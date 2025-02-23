@@ -133,14 +133,28 @@ def GetXcodeArchsDefault():
                 ["armv7", "armv7s"], ["armv7", "armv7s", "arm64"]
             ),
         )
+    elif xcode_version < '1000':
+        XCODE_ARCHS_DEFAULT_CACHE = XcodeArchsDefault(
+            '$(ARCHS_STANDARD)',
+            XcodeArchsVariableMapping(['x86_64'], ['x86_64']),
+            XcodeArchsVariableMapping(['i386', 'x86_64'], ['i386', 'x86_64']),
+            XcodeArchsVariableMapping(
+                ['armv7', 'armv7s', 'arm64'], ['armv7', 'armv7s', 'arm64']
+            )
+        )
+    elif xcode_version < '1200':
+        XCODE_ARCHS_DEFAULT_CACHE = XcodeArchsDefault(
+            '$(ARCHS_STANDARD)',
+            XcodeArchsVariableMapping(['x86_64'], ['x86_64']),
+            XcodeArchsVariableMapping(['x86_64'], ['x86_64']),
+            XcodeArchsVariableMapping(['arm64'], ['arm64'])
+        )
     else:
         XCODE_ARCHS_DEFAULT_CACHE = XcodeArchsDefault(
-            "$(ARCHS_STANDARD)",
-            XcodeArchsVariableMapping(["x86_64"], ["x86_64"]),
-            XcodeArchsVariableMapping(["i386", "x86_64"], ["i386", "x86_64"]),
-            XcodeArchsVariableMapping(
-                ["armv7", "armv7s", "arm64"], ["armv7", "armv7s", "arm64"]
-            ),
+            '$(ARCHS_STANDARD)',
+            XcodeArchsVariableMapping(['x86_64', 'arm64'], ['x86_64', 'arm64']), # mac
+            XcodeArchsVariableMapping(['x86_64', 'arm64'], ['x86_64', 'arm64']), # iphonesimulator
+            XcodeArchsVariableMapping(['arm64'], ['arm64']) # iphoneos
         )
     return XCODE_ARCHS_DEFAULT_CACHE
 
@@ -593,6 +607,9 @@ class XcodeSettings:
 
         if self._Test("GCC_CW_ASM_SYNTAX", "YES", default="YES"):
             cflags.append("-fasm-blocks")
+
+        if self._Test('ENABLE_BITCODE', 'YES', default='YES'):
+            cflags.append('-fembed-bitcode')
 
         if "GCC_DYNAMIC_NO_PIC" in self._Settings():
             if self._Settings()["GCC_DYNAMIC_NO_PIC"] == "YES":
