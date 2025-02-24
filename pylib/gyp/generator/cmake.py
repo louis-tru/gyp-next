@@ -354,7 +354,7 @@ def WriteRules(target_name, rules, extra_sources, extra_deps, path_to_gyp, outpu
             inputs_name,
             [NormjoinPathForceCMakeSource(path_to_gyp, dep) for dep in inputs],
         )
-        outputs = rule["outputs"]
+        outputs = rule.get("outputs", [])
         var_outputs = []
 
         for count, rule_source in enumerate(rule.get("rule_sources", [])):

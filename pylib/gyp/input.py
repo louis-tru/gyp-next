@@ -1193,7 +1193,7 @@ def EvalSingleCondition(cond_expr, true_dict, false_dict, phase, variables, buil
             e.text,
         )
         raise syntax_error
-    except NameError as e:
+    except Exception as e: # NameError
         gyp.common.ExceptionAppend(
             e,
             f"while evaluating condition '{cond_expr_expanded}' in {build_file}",
@@ -1398,7 +1398,7 @@ def ProcessVariablesAndConditionsInDict(
             # dict if it needs to pass it to something that can influence it.  No
             # copy is necessary here.
             ProcessVariablesAndConditionsInList(value, phase, variables, build_file)
-        elif not isinstance(value, int):
+        elif not isinstance(value, (int, float)):
             raise TypeError("Unknown type " + value.__class__.__name__ + " for " + key)
 
 
@@ -2081,7 +2081,6 @@ def DoDependentSettings(key, flat_list, targets, dependency_nodes):
                 target_dict, dependency_dict[key], build_file, dependency_build_file
             )
 
-
 def AdjustStaticLibraryDependencies(
     flat_list, targets, dependency_nodes, sort_dependencies
 ):
@@ -2306,7 +2305,7 @@ def MergeDicts(to, fro, to_file, fro_file):
                     + " for key "
                     + k
                 )
-        if type(v) in (str, int):
+        if type(v) in (str, int, float):
             # Overwrite the existing value, if any.  Cheap and easy.
             is_path = IsPathSection(k)
             if is_path:

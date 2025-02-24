@@ -1346,7 +1346,11 @@ exit 1
                     support_xct.AddDependency(xcode_targets[dependency])
 
         if "libraries" in spec:
+            libs = set([])
             for library in spec["libraries"]:
+                if library.startswith("-l") and library in libs: # Excluding repeat library
+                    continue
+                libs.add(library)
                 xct.FrameworksPhase().AddFile(library)
                 # Add the library's directory to LIBRARY_SEARCH_PATHS if necessary.
                 # I wish Xcode handled this automatically.

@@ -1305,7 +1305,6 @@ class PBXGroup(XCHierarchicalElement):
         path = posixpath.normpath(path)
         if is_dir:
             path = path + "/"
-
         # Adding or getting a variant?  Variants are files inside directories
         # with an ".lproj" extension.  Xcode uses variants for localization.  For
         # a variant path/to/Language.lproj/MainMenu.nib, put a variant group named
@@ -2693,8 +2692,8 @@ class PBXNativeTarget(XCTarget):
     def EmbedFrameworksPhase(self):
         embed_frameworks_phase = self.GetBuildPhaseByType(PBXCopyFilesBuildPhase)
         if embed_frameworks_phase is None:
-        embed_frameworks_phase = PBXCopyFilesBuildPhase({ 'name': 'Embed Frameworks', 'dstPath': '', 'dstSubfolderSpec' : 10 })
-        self.AppendProperty('buildPhases', embed_frameworks_phase)
+            embed_frameworks_phase = PBXCopyFilesBuildPhase({ 'name': 'Embed Frameworks', 'dstPath': '', 'dstSubfolderSpec' : 10 })
+            self.AppendProperty('buildPhases', embed_frameworks_phase)
 
         return embed_frameworks_phase
 
