@@ -2290,7 +2290,7 @@ def MergeDicts(to, fro, to_file, fro_file):
         # modified.
         if k in to:
             bad_merge = False
-            if type(v) in (str, int):
+            if type(v) in (str, int, float):
                 if type(to[k]) not in (str, int):
                     bad_merge = True
             elif not isinstance(v, type(to[k])):
