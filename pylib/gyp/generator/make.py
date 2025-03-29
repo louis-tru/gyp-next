@@ -2170,7 +2170,7 @@ $(obj).$(TOOLSET)/$(TARGET)/%%.o: $(obj)/%%%s FORCE_DO_CMD
             ).hexdigest()
             intermediate = "%s.intermediate" % cmddigest
             self.WriteLn("{}: {}".format(" ".join(outputs), intermediate))
-            self.WriteLn("\t%s" % "@:")
+            # self.WriteLn("\t%s" % "@:")
             self.WriteLn("{}: {}".format(".INTERMEDIATE", intermediate))
             self.WriteLn(
                 "{}: {}{}".format(intermediate, " ".join(inputs), force_append)
